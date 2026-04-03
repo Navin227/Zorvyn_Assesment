@@ -3,8 +3,9 @@
 import React from 'react';
 import { useAppContext } from '@/app/page';
 import { Card } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp, TrendingDown, Wallet } from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
 
 interface BalanceTrend {
   month: string;
@@ -17,18 +18,36 @@ interface SpendingByCategory {
 }
 
 export function DashboardOverview() {
-  const { transactions } = useAppContext();
+  const { transactions, isLoading } = useAppContext();
 
-  // Calculate summary metrics
-  const totalIncome = transactions
-    .filter((t) => t.type === 'income')
+  // Get current and previous month
+  const currentMonth = new Date().getMonth() + 1;
+  const currentYear = new Date().getFullYear();
+  const prevMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+  const prevYear = currentMonth === 1 ? currentYear - 1 : currentYear;
+
+  // Current month metrics
+  const currentMonthIncome = transactions
+    .filter((t) => t.type === 'income' && new Date(t.date).getMonth() + 1 === currentMonth && new Date(t.date).getFullYear() === currentYear)
     .reduce((sum, t) => sum + t.amount, 0);
 
-  const totalExpenses = transactions
-    .filter((t) => t.type === 'expense')
+  const currentMonthExpenses = transactions
+    .filter((t) => t.type === 'expense' && new Date(t.date).getMonth() + 1 === currentMonth && new Date(t.date).getFullYear() === currentYear)
     .reduce((sum, t) => sum + t.amount, 0);
 
-  const totalBalance = totalIncome - totalExpenses;
+  const currentMonthBalance = currentMonthIncome - currentMonthExpenses;
+
+  // Previous month metrics
+  const prevMonthIncome = transactions
+    .filter((t) => t.type === 'income' && new Date(t.date).getMonth() + 1 === prevMonth && new Date(t.date).getFullYear() === prevYear)
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const prevMonthExpenses = transactions
+    .filter((t) => t.type === 'expense' && new Date(t.date).getMonth() + 1 === prevMonth && new Date(t.date).getFullYear() === prevYear)
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const incomeChange = prevMonthIncome ? ((currentMonthIncome - prevMonthIncome) / prevMonthIncome) * 100 : 0;
+  const expenseChange = prevMonthExpenses ? ((currentMonthExpenses - prevMonthExpenses) / prevMonthExpenses) * 100 : 0;
 
   // Generate balance trend data
   const balanceTrendData: BalanceTrend[] = [
@@ -49,58 +68,114 @@ export function DashboardOverview() {
     { name: 'Utilities', value: 150 },
   ];
 
+  const totalSpending = spendingByCategory.reduce((sum, category) => sum + category.value, 0);
+
   const COLORS = ['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF4444'];
+
+  if (isLoading) {
+    return (
+      <div className="space-y-8">
+        {/* Loading Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="p-6 rounded-xl shadow-lg">
+              <div className="flex items-start justify-between">
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-8 w-32" />
+                </div>
+                <Skeleton className="h-10 w-10 rounded-full" />
+              </div>
+              <Skeleton className="h-3 w-20 mt-3" />
+            </Card>
+          ))}
+        </div>
+
+        {/* Loading Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Card className="lg:col-span-2 p-6 rounded-xl shadow-lg">
+            <Skeleton className="h-6 w-32 mb-6" />
+            <Skeleton className="h-80 w-full" />
+          </Card>
+          <Card className="p-6 rounded-xl shadow-lg">
+            <Skeleton className="h-6 w-40 mb-6" />
+            <Skeleton className="h-80 w-full" />
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Total Balance Card */}
-        <Card className="p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 hover:border-primary/40 transition-all">
+        <Card className="p-6 shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">Total Balance</p>
-              <h3 className="text-3xl font-bold text-foreground">
-                ${totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-1">This Month's Balance</p>
+              <h3 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white">
+                ${currentMonthBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </h3>
             </div>
-            <div className="p-2 bg-primary/20 rounded-lg">
-              <Wallet className="w-6 h-6 text-primary" />
+            <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-800">
+              <Wallet className="w-6 h-6 text-blue-700 dark:text-blue-300" />
             </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-3">+2.5% from last month</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">Current month income minus expenses</p>
         </Card>
 
         {/* Total Income Card */}
-        <Card className="p-6 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20 hover:border-accent/40 transition-all">
+        <Card className="p-6 shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">Total Income</p>
-              <h3 className="text-3xl font-bold text-accent">
-                ${totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-1">This Month's Income</p>
+              <h3 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white">
+                ${currentMonthIncome.toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </h3>
+              <div className="flex items-center gap-1 mt-2">
+                {incomeChange > 0 ? (
+                  <ArrowUpIcon className="w-4 h-4 text-green-600" />
+                ) : (
+                  <ArrowDownIcon className="w-4 h-4 text-red-600" />
+                )}
+                <span className={`text-xs font-semibold ${incomeChange > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {Math.abs(incomeChange).toFixed(1)}%
+                </span>
+              </div>
             </div>
-            <div className="p-2 bg-accent/20 rounded-lg">
-              <TrendingUp className="w-6 h-6 text-accent" />
+            <div className="p-3 rounded-full bg-green-100 dark:bg-green-900">
+              <TrendingUp className="w-6 h-6 text-green-700 dark:text-green-200" />
             </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-3">+5.2% from last month</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">vs last month</p>
         </Card>
 
         {/* Total Expenses Card */}
-        <Card className="p-6 bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20 hover:border-destructive/40 transition-all">
+        <Card className="p-6 shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground mb-1">Total Expenses</p>
-              <h3 className="text-3xl font-bold text-destructive">
-                ${totalExpenses.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-1">This Month's Expenses</p>
+              <h3 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white">
+                ${currentMonthExpenses.toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </h3>
+              <div className="flex items-center gap-1 mt-2">
+                {expenseChange > 0 ? (
+                  <ArrowUpIcon className="w-4 h-4 text-red-600" />
+                ) : (
+                  <ArrowDownIcon className="w-4 h-4 text-green-600" />
+                )}
+                <span className={`text-xs font-semibold ${expenseChange > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                  {Math.abs(expenseChange).toFixed(1)}%
+                </span>
+              </div>
             </div>
-            <div className="p-2 bg-destructive/20 rounded-lg">
-              <TrendingDown className="w-6 h-6 text-destructive" />
+            <div className="p-3 rounded-full bg-red-100 dark:bg-red-900">
+              <TrendingDown className="w-6 h-6 text-red-700 dark:text-red-200" />
             </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-3">-1.3% from last month</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">vs last month</p>
         </Card>
       </div>
 
@@ -109,29 +184,41 @@ export function DashboardOverview() {
         {/* Balance Trend Chart */}
         <Card className="lg:col-span-2 p-6">
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-foreground">Balance Trend</h3>
-            <p className="text-xs text-muted-foreground">Last 6 months</p>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Balance Trend</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400">Last 6 months</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={balanceTrendData}>
+            <LineChart data={balanceTrendData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis stroke="var(--muted-foreground)" />
-              <YAxis stroke="var(--muted-foreground)" />
+              <XAxis dataKey="month" stroke="var(--muted-foreground)" axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 600 }} label={{ value: 'Month', position: 'insideBottom', dy: 16, fill: 'var(--muted-foreground)', fontSize: 13, fontWeight: 700 }} />
+              <YAxis stroke="var(--muted-foreground)" axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 600 }} label={{ value: 'Balance ($)', angle: -90, position: 'insideLeft', dx: -10, fill: 'var(--muted-foreground)', fontSize: 13, fontWeight: 700 }} />
               <Tooltip
                 contentStyle={{
                   backgroundColor: 'var(--card)',
                   border: `1px solid var(--border)`,
                   borderRadius: '8px',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.12)',
+                }}
+                labelStyle={{ color: 'var(--foreground)', fontWeight: 700 }}
+                itemStyle={{ color: 'var(--foreground)', fontWeight: 600 }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'var(--card)',
+                  border: `1px solid var(--border)`,
+                  borderRadius: '8px',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.12)',
                 }}
                 labelStyle={{ color: 'var(--foreground)' }}
+                itemStyle={{ color: 'var(--foreground)' }}
               />
               <Line
                 type="monotone"
                 dataKey="balance"
-                stroke="var(--primary)"
-                strokeWidth={2}
-                dot={{ fill: 'var(--primary)', r: 5 }}
-                activeDot={{ r: 7 }}
+                stroke="#38bdf8"
+                strokeWidth={3}
+                dot={{ fill: '#60a5fa', r: 4 }}
+                activeDot={{ r: 6 }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -140,8 +227,8 @@ export function DashboardOverview() {
         {/* Spending by Category */}
         <Card className="p-6">
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-foreground">Spending by Category</h3>
-            <p className="text-xs text-muted-foreground">This month</p>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Spending by Category</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400">This month</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
@@ -153,6 +240,8 @@ export function DashboardOverview() {
                 outerRadius={90}
                 paddingAngle={2}
                 dataKey="value"
+                label={({ name, value }) => `${name} ${(value / totalSpending * 100).toFixed(1)}%`}
+                labelLine={false}
               >
                 {spendingByCategory.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -163,8 +252,15 @@ export function DashboardOverview() {
                   backgroundColor: 'var(--card)',
                   border: `1px solid var(--border)`,
                   borderRadius: '8px',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.12)',
                 }}
                 labelStyle={{ color: 'var(--foreground)' }}
+              />
+              <Legend
+                verticalAlign="bottom"
+                height={40}
+                iconType="circle"
+                wrapperStyle={{ fontSize: '12px', color: 'var(--muted-foreground)', marginTop: 10 }}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -176,9 +272,9 @@ export function DashboardOverview() {
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: COLORS[index % COLORS.length] }}
                   />
-                  <span className="text-muted-foreground">{category.name}</span>
+                  <span className="text-gray-600 dark:text-gray-400">{category.name}</span>
                 </div>
-                <span className="font-semibold text-foreground">${category.value}</span>
+                <span className="font-semibold text-gray-900 dark:text-white">${category.value}</span>
               </div>
             ))}
           </div>

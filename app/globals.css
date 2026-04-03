@@ -40,24 +40,24 @@
 }
 
 .dark {
-  --background: 222 84% 12%;
+  --background: 220 14% 7%; /* slate-950 #020617 style */
   --foreground: 0 0% 100%;
-  --card: 222 84% 10%;
+  --card: 220 18% 12%; /* slate-900 */
   --card-foreground: 0 0% 100%;
-  --popover: 222 84% 10%;
+  --popover: 220 18% 14%;
   --popover-foreground: 0 0% 100%;
   --primary: 217 91% 60%;
   --primary-foreground: 222 84% 5%;
   --secondary: 222 70% 18%;
   --secondary-foreground: 0 0% 100%;
-  --muted: 222 70% 18%;
-  --muted-foreground: 215 16% 65%;
+  --muted: 222 70% 40%;
+  --muted-foreground: 0 0% 65%;
   --accent: 138 76% 36%;
   --accent-foreground: 0 0% 100%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 100%;
-  --border: 222 70% 20%;
-  --input: 222 70% 20%;
+  --border: 222 16% 35%;
+  --input: 222 16% 20%;
   --ring: 217 91% 60%;
   --chart-1: 217 91% 60%;
   --chart-2: 138 76% 36%;
