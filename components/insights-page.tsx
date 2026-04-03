@@ -371,7 +371,7 @@ export function InsightsPage() {
                       <Cell key={entry.category} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: any) => `$${value.toFixed(2)}`} />
+                  <Tooltip formatter={(value: any) => `$${value.toFixed(2)}`} contentStyle={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--foreground)' }} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="space-y-3">
@@ -458,8 +458,8 @@ export function InsightsPage() {
                   <ResponsiveContainer width="100%" height={320}>
                     <LineChart data={activeTrendData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                      <XAxis dataKey="label" stroke="var(--muted-foreground)" />
-                      <YAxis stroke="var(--muted-foreground)" />
+                      <XAxis dataKey="label" stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
+                      <YAxis stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
                       <Tooltip />
                       <Legend />
                       <Line type="monotone" dataKey="income" stroke="#14b8a6" strokeWidth={2} />
@@ -471,9 +471,9 @@ export function InsightsPage() {
                   <ResponsiveContainer width="100%" height={320}>
                     <LineChart data={multiCategoryTrendData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                      <XAxis dataKey="label" stroke="var(--muted-foreground)" />
-                      <YAxis stroke="var(--muted-foreground)" />
-                      <Tooltip />
+                      <XAxis dataKey="label" stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
+                      <YAxis stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
+                      <Tooltip contentStyle={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--foreground)' }} />
                       <Legend />
                       {trendCategoryFilter.map((cat, idx) => (
                         <Line key={cat} type="monotone" dataKey={categoryKey(cat)} stroke={CHART_COLORS[idx % CHART_COLORS.length]} strokeWidth={2} name={cat} />
@@ -504,10 +504,10 @@ export function InsightsPage() {
             <ResponsiveContainer width="100%" height={340}>
               <BarChart data={trendDataMonthly}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="label" stroke="var(--muted-foreground)" />
-                <YAxis stroke="var(--muted-foreground)" />
-                <Tooltip />
-                <Legend />
+                <XAxis dataKey="label" stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
+                <YAxis stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
+                      <Tooltip contentStyle={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--foreground)' }} />
+                      <Legend />
                 <Bar dataKey="income" fill="#22c55e" />
                 <Bar dataKey="expense" fill="#ef4444" />
               </BarChart>
