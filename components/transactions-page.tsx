@@ -104,12 +104,12 @@ export function TransactionsPage() {
                 Add Transaction
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md border-2 border-border shadow-lg">
+            <DialogContent className="sm:max-w-md border-0 shadow-xl rounded-xl">
               <DialogHeader className="pb-4 border-b border-border">
                 <DialogTitle className="text-2xl font-bold text-foreground">Add New Transaction</DialogTitle>
               </DialogHeader>
               <DialogDescription className="sr-only">Fill in the details to add a new transaction to your account.</DialogDescription>
-              <div className="space-y-5 py-4">
+              <div className="space-y-4 py-4">
                 {/* Date and Type Row */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -118,13 +118,13 @@ export function TransactionsPage() {
                       type="date"
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="bg-secondary"
+                      className="bg-secondary rounded-lg border-0"
                     />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-foreground">Type</label>
                     <Select value={formData.type} onValueChange={(v: any) => setFormData({ ...formData, type: v })}>
-                      <SelectTrigger className="bg-secondary">
+                      <SelectTrigger className="bg-secondary rounded-lg border-0">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -143,7 +143,7 @@ export function TransactionsPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-foreground">Amount</label>
-                    <div className="flex items-center border border-border rounded-md bg-secondary overflow-hidden">
+                    <div className="flex items-center border border-border rounded-lg bg-secondary overflow-hidden">
                       <span className="px-3 py-2 text-sm font-medium text-muted-foreground">$</span>
                       <Input
                         type="number"
@@ -157,7 +157,7 @@ export function TransactionsPage() {
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-foreground">Category</label>
                     <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
-                      <SelectTrigger className="bg-secondary">
+                      <SelectTrigger className="bg-secondary rounded-lg border-0">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -180,14 +180,14 @@ export function TransactionsPage() {
                     placeholder="e.g. Monthly groceries, Gas refill, etc."
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="bg-secondary"
+                    className="bg-secondary rounded-lg border-0"
                   />
                 </div>
 
                 {/* Submit Button */}
                 <Button
                   onClick={handleAddTransaction}
-                  className="w-full h-10 mt-6 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
+                  className="w-full h-10 mt-6 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold rounded-lg transition-all duration-200"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Add Transaction
@@ -204,10 +204,10 @@ export function TransactionsPage() {
           placeholder="Search by category or description..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="flex-1"
+          className="flex-1 rounded-lg border-0 shadow-sm"
         />
         <Select value={filterType} onValueChange={(v: any) => setFilterType(v)}>
-          <SelectTrigger className="w-full sm:w-40">
+          <SelectTrigger className="w-full sm:w-40 rounded-lg border-0 shadow-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -219,12 +219,12 @@ export function TransactionsPage() {
       </div>
 
       {/* Transactions Table */}
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden border-0 shadow-md rounded-xl">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-secondary border-b border-border">
+            <thead className="bg-secondary/50 border-b border-border">
               <tr>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">
+                <th className="px-4 py-4 text-left text-xs font-bold text-foreground uppercase tracking-wider">
                   <button
                     onClick={() => toggleSort('date')}
                     className="flex items-center gap-2 hover:text-primary transition-colors"
@@ -233,10 +233,10 @@ export function TransactionsPage() {
                     {sortField === 'date' && <ArrowUpDown className="w-4 h-4" />}
                   </button>
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">Category</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">Description</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-foreground">Type</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-foreground">
+                <th className="px-4 py-4 text-left text-xs font-bold text-foreground uppercase tracking-wider">Category</th>
+                <th className="px-4 py-4 text-left text-xs font-bold text-foreground uppercase tracking-wider">Description</th>
+                <th className="px-4 py-4 text-left text-xs font-bold text-foreground uppercase tracking-wider">Type</th>
+                <th className="px-4 py-4 text-right text-xs font-bold text-foreground uppercase tracking-wider">
                   <button
                     onClick={() => toggleSort('amount')}
                     className="flex items-center justify-end gap-2 hover:text-primary transition-colors ml-auto"
@@ -245,7 +245,7 @@ export function TransactionsPage() {
                     {sortField === 'amount' && <ArrowUpDown className="w-4 h-4" />}
                   </button>
                 </th>
-                {userRole === 'admin' && <th className="px-4 py-3 text-center text-sm font-semibold text-foreground">Action</th>}
+                {userRole === 'admin' && <th className="px-4 py-4 text-center text-xs font-bold text-foreground uppercase tracking-wider">Action</th>}
               </tr>
             </thead>
             <tbody>
@@ -257,36 +257,37 @@ export function TransactionsPage() {
                 </tr>
               ) : (
                 filteredTransactions.map((transaction) => (
-                  <tr key={transaction.id} className="border-b border-border hover:bg-secondary/50 transition-colors">
-                    <td className="px-4 py-3 text-sm text-foreground">{transaction.date}</td>
-                    <td className="px-4 py-3 text-sm text-foreground font-medium">{transaction.category}</td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">{transaction.description}</td>
-                    <td className="px-4 py-3 text-sm">
+                  <tr key={transaction.id} className="border-b border-border hover:bg-secondary/30 transition-all duration-200">
+                    <td className="px-4 py-4 text-sm text-foreground font-medium">{transaction.date}</td>
+                    <td className="px-4 py-4 text-sm text-foreground font-semibold">{transaction.category}</td>
+                    <td className="px-4 py-4 text-sm text-muted-foreground">{transaction.description}</td>
+                    <td className="px-4 py-4 text-sm">
                       <span
-                        className={`inline-block px-2 py-1 rounded text-xs font-semibold ${
+                        className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm ${
                           transaction.type === 'income'
                             ? 'bg-accent/20 text-accent'
                             : 'bg-destructive/20 text-destructive'
                         }`}
                       >
-                        {transaction.type === 'income' ? '+ Income' : '- Expense'}
+                        {transaction.type === 'income' ? '✓ Income' : '✕ Expense'}
                       </span>
                     </td>
                     <td
-                      className={`px-4 py-3 text-sm text-right font-semibold ${
+                      className={`px-4 py-4 text-sm text-right font-bold ${
                         transaction.type === 'income' ? 'text-accent' : 'text-destructive'
                       }`}
                     >
                       {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
                     </td>
                     {userRole === 'admin' && (
-                      <td className="px-4 py-3 text-center">
+                      <td className="px-4 py-4 text-center">
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDeleteTransaction(transaction.id)}
+                          className="hover:bg-destructive/10 transition-all duration-200"
                         >
-                          <Trash2 className="w-4 h-4 text-destructive" />
+                          <Trash2 className="w-4 h-4 text-destructive hover:text-destructive/80" />
                         </Button>
                       </td>
                     )}
@@ -299,21 +300,21 @@ export function TransactionsPage() {
       </Card>
 
       {/* Summary Footer */}
-      <Card className="p-6 bg-secondary/50">
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <p className="text-xs font-medium text-muted-foreground mb-1">Total Transactions</p>
-            <p className="text-2xl font-bold text-foreground">{filteredTransactions.length}</p>
+      <Card className="p-6 bg-gradient-to-r from-primary/5 to-primary/0 border-0 shadow-md rounded-xl">
+        <div className="grid grid-cols-3 gap-6">
+          <div className="p-4 rounded-lg bg-background/50">
+            <p className="text-xs font-bold text-muted-foreground mb-2 uppercase tracking-wide">Total Transactions</p>
+            <p className="text-3xl font-bold text-foreground">{filteredTransactions.length}</p>
           </div>
-          <div>
-            <p className="text-xs font-medium text-muted-foreground mb-1">Total Income</p>
-            <p className="text-2xl font-bold text-accent">
+          <div className="p-4 rounded-lg bg-accent/5">
+            <p className="text-xs font-bold text-muted-foreground mb-2 uppercase tracking-wide">Total Income</p>
+            <p className="text-3xl font-bold text-accent">
               ${filteredTransactions.filter((t) => t.type === 'income').reduce((sum, t) => sum + t.amount, 0).toFixed(2)}
             </p>
           </div>
-          <div>
-            <p className="text-xs font-medium text-muted-foreground mb-1">Total Expenses</p>
-            <p className="text-2xl font-bold text-destructive">
+          <div className="p-4 rounded-lg bg-destructive/5">
+            <p className="text-xs font-bold text-muted-foreground mb-2 uppercase tracking-wide">Total Expenses</p>
+            <p className="text-3xl font-bold text-destructive">
               ${filteredTransactions.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0).toFixed(2)}
             </p>
           </div>

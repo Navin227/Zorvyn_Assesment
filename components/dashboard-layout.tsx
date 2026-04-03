@@ -19,15 +19,15 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen bg-background text-foreground">
       {/* Sidebar */}
       <div
-        className={`hidden lg:flex lg:w-64 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border`}
+        className={`hidden lg:flex lg:w-64 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border shadow-lg`}
       >
         <div className="flex flex-col h-full p-6 gap-8">
           {/* Logo */}
           <div className="flex items-center gap-3 font-bold text-xl">
-            <div className="w-8 h-8 rounded-lg bg-sidebar-primary flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-sidebar-primary flex items-center justify-center shadow-md">
               <BarChart3 className="w-5 h-5 text-sidebar-primary-foreground" />
             </div>
-            <span className="hidden sm:inline">FinFlow</span>
+            <span className="hidden sm:inline bg-gradient-to-r from-sidebar-primary to-sidebar-primary/70 bg-clip-text text-transparent">FinFlow</span>
           </div>
 
           {/* Navigation */}
@@ -41,14 +41,14 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                     setCurrentPage(item.id as any);
                     setSidebarOpen(false);
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium ${
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-semibold text-sm group ${
                     currentPage === item.id
-                      ? 'bg-sidebar-primary text-sidebar-primary-foreground'
-                      : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                      ? 'bg-sidebar-primary text-sidebar-primary-foreground shadow-lg'
+                      : 'text-sidebar-foreground hover:bg-sidebar-accent/20 hover:text-sidebar-accent-foreground'
                   }`}
                 >
-                  <Icon className="w-5 h-5 flex-shrink-0" />
-                  <span className="text-sm">{item.label}</span>
+                  <Icon className="w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-110" />
+                  <span>{item.label}</span>
                 </button>
               );
             })}
@@ -76,10 +76,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             <Button
               onClick={() => setDarkMode(!darkMode)}
               size="sm"
-              className="w-full flex items-center justify-center gap-2 bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/80"
+              className="w-full flex items-center justify-center gap-2 bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/80 transition-all duration-200 rounded-lg"
             >
               {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              <span className="text-xs">{darkMode ? 'Light' : 'Dark'}</span>
+              <span className="text-xs font-semibold">{darkMode ? 'Light' : 'Dark'}</span>
             </Button>
           </div>
         </div>
@@ -88,19 +88,19 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <div className="bg-card border-b border-border px-4 lg:px-8 py-4 flex items-center justify-between">
+        <div className="bg-card border-b border-border px-4 lg:px-8 py-4 flex items-center justify-between shadow-sm">
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="lg:hidden hover:bg-secondary/50 transition-all duration-200"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
-          <div className="text-lg font-semibold">
+          <div className="text-lg font-bold text-foreground">
             {navItems.find((item) => item.id === currentPage)?.label}
           </div>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm font-semibold text-muted-foreground bg-secondary/50 px-3 py-1.5 rounded-full">
             {userRole === 'admin' ? '👤 Admin' : '👁️ Viewer'}
           </div>
         </div>
@@ -153,14 +153,14 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                         setCurrentPage(item.id as any);
                         setSidebarOpen(false);
                       }}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium ${
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-semibold text-sm group ${
                         currentPage === item.id
-                          ? 'bg-sidebar-primary text-sidebar-primary-foreground'
-                          : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                          ? 'bg-sidebar-primary text-sidebar-primary-foreground shadow-lg'
+                          : 'text-sidebar-foreground hover:bg-sidebar-accent/20 hover:text-sidebar-accent-foreground'
                       }`}
                     >
-                      <Icon className="w-5 h-5 flex-shrink-0" />
-                      <span className="text-sm">{item.label}</span>
+                      <Icon className="w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-110" />
+                      <span>{item.label}</span>
                     </button>
                   );
                 })}
@@ -184,15 +184,15 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                   </p>
                 </div>
 
-                {/* Dark Mode Toggle */}
-                <Button
-                  onClick={() => setDarkMode(!darkMode)}
-                  size="sm"
-                  className="w-full flex items-center justify-center gap-2 bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/80"
-                >
-                  {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                  <span className="text-xs">{darkMode ? 'Light' : 'Dark'}</span>
-                </Button>
+            {/* Dark Mode Toggle */}
+            <Button
+              onClick={() => setDarkMode(!darkMode)}
+              size="sm"
+              className="w-full flex items-center justify-center gap-2 bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/80 transition-all duration-200 rounded-lg"
+            >
+              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              <span className="text-xs font-semibold">{darkMode ? 'Light' : 'Dark'}</span>
+            </Button>
               </div>
             </div>
           </div>
