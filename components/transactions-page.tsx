@@ -172,7 +172,7 @@ export function TransactionsPage() {
                       type="date"
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full"
+                      className="w-full text-gray-900 dark:text-white dark:bg-slate-800 placeholder:text-gray-500 dark:placeholder:text-gray-400"
                     />
                   </div>
                   <div className="space-y-2">
@@ -204,7 +204,7 @@ export function TransactionsPage() {
                         placeholder="0.00"
                         value={formData.amount}
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                        className="w-full border-0 bg-transparent focus-visible:ring-0"
+                        className="w-full border-0 bg-transparent focus-visible:ring-0 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
                       />
                     </div>
                   </div>
@@ -234,7 +234,7 @@ export function TransactionsPage() {
                     placeholder="e.g. Monthly groceries, Gas refill, etc."
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full"
+                    className="w-full text-gray-900 dark:text-white dark:bg-slate-800 placeholder:text-gray-500 dark:placeholder:text-gray-400"
                   />
                 </div>
 
@@ -373,7 +373,7 @@ export function TransactionsPage() {
                             type="date"
                             value={formData.date}
                             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                            className="w-full"
+                            className="w-full text-gray-900 dark:text-white dark:bg-slate-800 placeholder:text-gray-500 dark:placeholder:text-gray-400"
                           />
                         </div>
                         <div className="space-y-2">
@@ -405,7 +405,7 @@ export function TransactionsPage() {
                               placeholder="0.00"
                               value={formData.amount}
                               onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                              className="w-full border-0 bg-transparent focus-visible:ring-0"
+                              className="w-full border-0 bg-transparent focus-visible:ring-0 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
                             />
                           </div>
                         </div>
@@ -435,7 +435,7 @@ export function TransactionsPage() {
                           placeholder="e.g. Monthly groceries, Gas refill, etc."
                           value={formData.description}
                           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                          className="w-full"
+                          className="w-full text-gray-900 dark:text-white dark:bg-slate-800 placeholder:text-gray-500 dark:placeholder:text-gray-400"
                         />
                       </div>
 
