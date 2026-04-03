@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { useAppContext } from '@/app/page';
 import { Card } from '@/components/ui/card';
-import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from 'recharts';
+import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, Legend, PieChart, Pie, Cell } from 'recharts';
 
 type HistoryRange = '1' | '3' | '6' | 'all';
 
@@ -359,15 +359,38 @@ export function HistoryPage() {
 
             <Card className="p-4">
               <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">Category-wise Spending</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={categorySpending}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="category" hide />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="amount" fill="#f97316" />
-                </BarChart>
+              <ResponsiveContainer width="100%" height={350}>
+                <PieChart>
+                  <Pie
+                    data={categorySpending}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ category, value }) => `${category} $${value.toFixed(0)}`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="amount"
+                  >
+                    {categorySpending.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF4444', '#EC4899', '#06B6D4'][index % 7]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+                  <Legend />
+                </PieChart>
               </ResponsiveContainer>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                {categorySpending.map((item, index) => (
+                  <div key={item.category} className="flex items-center gap-2 text-xs">
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: ['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF4444', '#EC4899', '#06B6D4'][index % 7] }}
+                    />
+                    <span className="text-gray-600 dark:text-gray-400">{item.category}</span>
+                    <span className="font-semibold text-gray-900 dark:text-white ml-auto">${item.amount.toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
             </Card>
           </div>
 

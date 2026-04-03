@@ -19,6 +19,7 @@ export function TransactionsPage() {
   const { transactions, setTransactions, userRole, isLoading } = useAppContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<FilterType>('all');
+  const [selectedMonths, setSelectedMonths] = useState<string[]>([]);
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [openDialog, setOpenDialog] = useState(false);
@@ -37,7 +38,15 @@ export function TransactionsPage() {
         t.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
         t.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesType = filterType === 'all' || t.type === filterType;
-      return matchesSearch && matchesType;
+      
+      // Month filter
+      let matchesMonth = true;
+      if (selectedMonths.length > 0) {
+        const transactionMonth = new Date(t.date).toLocaleString('default', { month: 'long', year: 'numeric' });
+        matchesMonth = selectedMonths.includes(transactionMonth);
+      }
+      
+      return matchesSearch && matchesType && matchesMonth;
     });
 
     // Sort
@@ -52,7 +61,7 @@ export function TransactionsPage() {
     });
 
     return filtered;
-  }, [transactions, searchTerm, filterType, sortField, sortOrder]);
+  }, [transactions, searchTerm, filterType, sortField, sortOrder, selectedMonths]);
 
   const handleAddTransaction = () => {
     if (!formData.amount || !formData.description) {
@@ -101,6 +110,22 @@ export function TransactionsPage() {
     }
   };
 
+  // Get all available months from transactions
+  const availableMonths = useMemo(() => {
+    const months = new Set<string>();
+    transactions.forEach((t) => {
+      const month = new Date(t.date).toLocaleString('default', { month: 'long', year: 'numeric' });
+      months.add(month);
+    });
+    return Array.from(months).sort((a, b) => new Date(b) - new Date(a));
+  }, [transactions]);
+
+  const toggleMonth = (month: string) => {
+    setSelectedMonths((prev) =>
+      prev.includes(month) ? prev.filter((m) => m !== month) : [...prev, month]
+    );
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -126,7 +151,7 @@ export function TransactionsPage() {
                 {/* Date and Type Row */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-500">Date</label>
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Date</label>
                     <Input
                       type="date"
                       value={formData.date}
@@ -135,7 +160,7 @@ export function TransactionsPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-500">Type</label>
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Type</label>
                     <Select value={formData.type} onValueChange={(v: any) => setFormData({ ...formData, type: v })}>
                       <SelectTrigger className="w-full" >
                         <SelectValue />
@@ -155,7 +180,7 @@ export function TransactionsPage() {
                 {/* Amount and Category Row */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-600 dark:text-gray-400">Amount</label>
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Amount</label>
                     <div className="flex items-center border border-gray-200 rounded-xl bg-white dark:bg-slate-800 dark:border-white/10 overflow-hidden">
                       <span className="px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-200">$</span>
                       <Input
@@ -168,7 +193,7 @@ export function TransactionsPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-500">Category</label>
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Category</label>
                     <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
                       <SelectTrigger className="w-full">
                         <SelectValue />
@@ -188,7 +213,7 @@ export function TransactionsPage() {
 
                 {/* Description */}
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-500">Description</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Description</label>
                   <Input
                     placeholder="e.g. Monthly groceries, Gas refill, etc."
                     value={formData.description}
@@ -230,6 +255,28 @@ export function TransactionsPage() {
           </SelectContent>
         </Select>
       </div>
+
+      {/* Month Filter */}
+      {availableMonths.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Filter by Month:</label>
+          <div className="flex flex-wrap gap-2">
+            {availableMonths.map((month) => (
+              <button
+                key={month}
+                onClick={() => toggleMonth(month)}
+                className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
+                  selectedMonths.includes(month)
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white text-gray-700 border-gray-300 dark:bg-slate-800 dark:text-gray-200 dark:border-white/10 hover:border-blue-400'
+                }`}
+              >
+                {month}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Transactions Table */}
       <Card className="overflow-hidden rounded-xl shadow-lg border border-white/10 dark:border-white/10">
@@ -273,7 +320,7 @@ export function TransactionsPage() {
                       {/* Date and Type Row */}
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold text-gray-500">Date</label>
+                          <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Date</label>
                           <Input
                             type="date"
                             value={formData.date}
@@ -282,7 +329,7 @@ export function TransactionsPage() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold text-gray-500">Type</label>
+                          <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Type</label>
                           <Select value={formData.type} onValueChange={(v: any) => setFormData({ ...formData, type: v })}>
                             <SelectTrigger className="w-full" >
                               <SelectValue />
@@ -302,9 +349,9 @@ export function TransactionsPage() {
                       {/* Amount and Category Row */}
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold text-gray-500">Amount</label>
+                          <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Amount</label>
                           <div className="flex items-center border border-border rounded-xl bg-gray-50 dark:bg-slate-800 overflow-hidden">
-                            <span className="px-3 py-2 text-sm font-medium text-gray-500">$</span>
+                            <span className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300">$</span>
                             <Input
                               type="number"
                               placeholder="0.00"
@@ -315,7 +362,7 @@ export function TransactionsPage() {
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm font-semibold text-gray-500">Category</label>
+                          <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Category</label>
                           <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
                             <SelectTrigger className="w-full">
                               <SelectValue />
@@ -335,7 +382,7 @@ export function TransactionsPage() {
 
                       {/* Description */}
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold text-gray-500">Description</label>
+                        <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Description</label>
                         <Input
                           placeholder="e.g. Monthly groceries, Gas refill, etc."
                           value={formData.description}
