@@ -309,7 +309,7 @@ export function HistoryPage() {
                         <td className="px-3 py-2">{tx.date}</td>
                         <td className="px-3 py-2">{tx.category}</td>
                         <td className="px-3 py-2 capitalize">{tx.type}</td>
-                        <td className={`px-3 py-2 ${tx.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                        <td className={`px-3 py-2 ${tx.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                           ${tx.amount.toFixed(2)}
                         </td>
                       </tr>

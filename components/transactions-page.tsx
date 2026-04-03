@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Plus, Trash2, ArrowUpDown, FileText } from 'lucide-react';
+import { Plus, Trash2, ArrowUpDown, FileText, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 
 type SortField = 'date' | 'amount';
@@ -20,6 +20,7 @@ export function TransactionsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<FilterType>('all');
   const [selectedMonths, setSelectedMonths] = useState<string[]>([]);
+  const [monthDropdownOpen, setMonthDropdownOpen] = useState(false);
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [openDialog, setOpenDialog] = useState(false);
@@ -120,10 +121,25 @@ export function TransactionsPage() {
     return Array.from(months).sort((a, b) => new Date(b) - new Date(a));
   }, [transactions]);
 
+  // Initialize selected months with all months on first render
+  React.useEffect(() => {
+    if (selectedMonths.length === 0 && availableMonths.length > 0) {
+      setSelectedMonths(availableMonths);
+    }
+  }, [availableMonths]);
+
   const toggleMonth = (month: string) => {
     setSelectedMonths((prev) =>
       prev.includes(month) ? prev.filter((m) => m !== month) : [...prev, month]
     );
+  };
+
+  const selectAllMonths = () => {
+    setSelectedMonths(availableMonths);
+  };
+
+  const clearAllMonths = () => {
+    setSelectedMonths([]);
   };
 
   return (
@@ -256,25 +272,57 @@ export function TransactionsPage() {
         </Select>
       </div>
 
-      {/* Month Filter */}
+      {/* Month Filter Dropdown */}
       {availableMonths.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Filter by Month:</label>
-          <div className="flex flex-wrap gap-2">
-            {availableMonths.map((month) => (
-              <button
-                key={month}
-                onClick={() => toggleMonth(month)}
-                className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
-                  selectedMonths.includes(month)
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-gray-700 border-gray-300 dark:bg-slate-800 dark:text-gray-200 dark:border-white/10 hover:border-blue-400'
-                }`}
-              >
-                {month}
-              </button>
-            ))}
-          </div>
+        <div className="relative">
+          <button
+            onClick={() => setMonthDropdownOpen(!monthDropdownOpen)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-slate-800 text-gray-700 dark:text-gray-200 font-medium hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors w-full sm:w-auto"
+          >
+            <span className="text-sm">
+              {selectedMonths.length === 0
+                ? 'No months selected'
+                : selectedMonths.length === availableMonths.length
+                  ? 'All months'
+                  : `${selectedMonths.length} month${selectedMonths.length !== 1 ? 's' : ''}`}
+            </span>
+            <ChevronDown className={`w-4 h-4 transition-transform ${monthDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {monthDropdownOpen && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-white/10 rounded-xl shadow-lg z-50">
+              <div className="p-3 border-b border-gray-200 dark:border-white/10 space-y-2">
+                <button
+                  onClick={selectAllMonths}
+                  className="w-full text-left px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded-lg transition-colors"
+                >
+                  Select All
+                </button>
+                <button
+                  onClick={clearAllMonths}
+                  className="w-full text-left px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                >
+                  Clear All
+                </button>
+              </div>
+              <div className="max-h-64 overflow-y-auto p-2 space-y-1">
+                {availableMonths.map((month) => (
+                  <label
+                    key={month}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 cursor-pointer transition-colors"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedMonths.includes(month)}
+                      onChange={() => toggleMonth(month)}
+                      className="w-4 h-4 rounded border-gray-300 dark:border-white/20 cursor-pointer accent-blue-600"
+                    />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{month}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -451,7 +499,7 @@ export function TransactionsPage() {
                     </td>
                     <td
                       className={`px-4 py-3 text-sm text-right font-semibold ${
-                        transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
+                        transaction.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                       }`}
                     >
                       {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
