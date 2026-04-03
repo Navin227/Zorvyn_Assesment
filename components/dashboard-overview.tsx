@@ -189,18 +189,18 @@ export function DashboardOverview() {
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={balanceTrendData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis dataKey="month" stroke="#9ca3af" axisLine={false} tickLine={false} tick={{ fill: '#e5e7eb', fontSize: 12, fontWeight: 600 }} label={{ value: 'Month', position: 'insideBottom', dy: 16, fill: '#e5e7eb', fontSize: 13, fontWeight: 700 }} />
-              <YAxis stroke="#9ca3af" axisLine={false} tickLine={false} tick={{ fill: '#e5e7eb', fontSize: 12, fontWeight: 600 }} label={{ value: 'Balance ($)', angle: -90, position: 'insideLeft', dx: -10, fill: '#e5e7eb', fontSize: 13, fontWeight: 700 }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" />
+              <XAxis dataKey="month" stroke="#64748b" axisLine={false} tickLine={false} tick={{ fill: '#475569', fontSize: 12, fontWeight: 600 }} label={{ value: 'Month', position: 'insideBottom', dy: 16, fill: '#475569', fontSize: 13, fontWeight: 700 }} />
+              <YAxis stroke="#64748b" axisLine={false} tickLine={false} tick={{ fill: '#475569', fontSize: 12, fontWeight: 600 }} label={{ value: 'Balance ($)', angle: -90, position: 'insideLeft', dx: -10, fill: '#475569', fontSize: 13, fontWeight: 700 }} />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#1e293b',
-                  border: `1px solid #334155`,
+                  backgroundColor: '#f8fafc',
+                  border: `1px solid #cbd5e1`,
                   borderRadius: '8px',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.12)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
                 }}
-                labelStyle={{ color: '#f1f5f9', fontWeight: 700 }}
-                itemStyle={{ color: '#f1f5f9', fontWeight: 600 }}
+                labelStyle={{ color: '#0f172a', fontWeight: 700 }}
+                itemStyle={{ color: '#0f172a', fontWeight: 600 }}
               />
               <Line
                 type="monotone"
@@ -239,18 +239,18 @@ export function DashboardOverview() {
               </Pie>
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#1e293b',
-                  border: `1px solid #334155`,
+                  backgroundColor: '#f8fafc',
+                  border: `1px solid #cbd5e1`,
                   borderRadius: '8px',
-                  boxShadow: '0 10px 25px rgba(0,0,0,0.12)',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.05)',
                 }}
-                labelStyle={{ color: '#f1f5f9' }}
+                labelStyle={{ color: '#0f172a' }}
               />
               <Legend
                 verticalAlign="bottom"
                 height={40}
                 iconType="circle"
-                wrapperStyle={{ fontSize: '12px', color: '#9ca3af', marginTop: 10 }}
+                wrapperStyle={{ fontSize: '12px', color: '#475569', marginTop: 10, fontWeight: 500 }}
               />
             </PieChart>
           </ResponsiveContainer>
