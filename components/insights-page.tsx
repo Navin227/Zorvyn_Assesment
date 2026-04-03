@@ -371,7 +371,7 @@ export function InsightsPage() {
                       <Cell key={entry.category} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: any) => `$${value.toFixed(2)}`} contentStyle={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--foreground)' }} />
+                  <Tooltip formatter={(value: any) => `$${value.toFixed(2)}`} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="space-y-3">
@@ -457,11 +457,11 @@ export function InsightsPage() {
                   // All categories - show income vs expense
                   <ResponsiveContainer width="100%" height={320}>
                     <LineChart data={activeTrendData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                      <XAxis dataKey="label" stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
-                      <YAxis stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
-                      <Tooltip />
-                      <Legend />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                      <XAxis dataKey="label" stroke="#9ca3af" tick={{ fill: '#e5e7eb', fontSize: 12, fontWeight: 500 }} />
+                      <YAxis stroke="#9ca3af" tick={{ fill: '#e5e7eb', fontSize: 12, fontWeight: 500 }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} />
+                      <Legend wrapperStyle={{ color: '#9ca3af' }} />
                       <Line type="monotone" dataKey="income" stroke="#14b8a6" strokeWidth={2} />
                       <Line type="monotone" dataKey="expense" stroke="#f43f5e" strokeWidth={2} />
                     </LineChart>
@@ -470,11 +470,11 @@ export function InsightsPage() {
                   // Selected categories trends
                   <ResponsiveContainer width="100%" height={320}>
                     <LineChart data={multiCategoryTrendData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                      <XAxis dataKey="label" stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
-                      <YAxis stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
-                      <Tooltip contentStyle={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--foreground)' }} />
-                      <Legend />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                      <XAxis dataKey="label" stroke="#9ca3af" tick={{ fill: '#e5e7eb', fontSize: 12, fontWeight: 500 }} />
+                      <YAxis stroke="#9ca3af" tick={{ fill: '#e5e7eb', fontSize: 12, fontWeight: 500 }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} />
+                      <Legend wrapperStyle={{ color: '#9ca3af' }} />
                       {trendCategoryFilter.map((cat, idx) => (
                         <Line key={cat} type="monotone" dataKey={categoryKey(cat)} stroke={CHART_COLORS[idx % CHART_COLORS.length]} strokeWidth={2} name={cat} />
                       ))}
@@ -503,11 +503,11 @@ export function InsightsPage() {
             </div>
             <ResponsiveContainer width="100%" height={340}>
               <BarChart data={trendDataMonthly}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="label" stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
-                <YAxis stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
-                      <Tooltip contentStyle={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--foreground)' }} />
-                      <Legend />
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis dataKey="label" stroke="#9ca3af" tick={{ fill: '#e5e7eb', fontSize: 12, fontWeight: 500 }} />
+                <YAxis stroke="#9ca3af" tick={{ fill: '#e5e7eb', fontSize: 12, fontWeight: 500 }} />
+                <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} />
+                <Legend wrapperStyle={{ color: '#9ca3af' }} />
                 <Bar dataKey="income" fill="#22c55e" />
                 <Bar dataKey="expense" fill="#ef4444" />
               </BarChart>

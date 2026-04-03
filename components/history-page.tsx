@@ -346,11 +346,11 @@ export function HistoryPage() {
               <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">Income vs Expense</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={monthlyData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--muted-foreground)" />
-                  <XAxis dataKey="month" stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
-                  <YAxis stroke="var(--muted-foreground)" tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }} />
-                  <Tooltip contentStyle={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--foreground)' }} />
-                  <Legend />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                  <XAxis dataKey="month" stroke="#9ca3af" tick={{ fill: '#e5e7eb', fontSize: 12, fontWeight: 500 }} />
+                  <YAxis stroke="#9ca3af" tick={{ fill: '#e5e7eb', fontSize: 12, fontWeight: 500 }} />
+                  <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} />
+                  <Legend wrapperStyle={{ color: '#9ca3af', fontSize: '12px' }} />
                   <Line type="monotone" dataKey="income" stroke="#10B981" strokeWidth={2} dot={{ fill: '#10B981', r: 4 }} />
                   <Line type="monotone" dataKey="expense" stroke="#EF4444" strokeWidth={2} dot={{ fill: '#EF4444', r: 4 }} />
                   <Line type="monotone" dataKey="savings" stroke="#3B82F6" strokeWidth={2} dot={{ fill: '#3B82F6', r: 4 }} />
@@ -375,8 +375,8 @@ export function HistoryPage() {
                       <Cell key={`cell-${index}`} fill={['#3B82F6', '#10B981', '#8B5CF6', '#F59E0B', '#EF4444', '#EC4899', '#06B6D4'][index % 7]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => `$${value.toFixed(2)}`} contentStyle={{ backgroundColor: 'var(--card)', border: '1px solid var(--border)', borderRadius: '8px', color: 'var(--foreground)' }} />
-                  <Legend wrapperStyle={{ paddingTop: '16px', color: 'var(--muted-foreground)', fontSize: '12px' }} />
+                  <Tooltip formatter={(value) => `$${value.toFixed(2)}`} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f1f5f9' }} />
+                  <Legend wrapperStyle={{ paddingTop: '16px', color: '#9ca3af', fontSize: '12px' }} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="mt-4 grid grid-cols-2 gap-2">
